@@ -24,6 +24,11 @@ sub {
     margin-left: 1em;
 }
 
+.item-search-icon {
+    float: right;
+    margin-right: 1em;
+}
+
 .td-chance {
     width: 1px;
     white-space: nowrap;

@@ -1321,53 +1321,11 @@ function hideNoResults(tableType) {
     }
 }
 
-function addRowToTable(table, name, chance, category) {
-    const tdName = document.createElement('td');
-    tdName.classList.add('td-name');
-    tdName.textContent = name;
-
-    if (category) {
-        const span = document.createElement('span');
-        span.classList.add('sp-category');
-        span.textContent = '(' + category + ')';
-        tdName.appendChild(span);
+function handleSearchInput(input) {
+    if (input === undefined) {
+        input = document.querySelector('input.search-items');
     }
-
-    const tdChance = document.createElement('td');
-    tdChance.classList.add('td-chance');
-    tdChance.textContent = chance;
-
-    const tr = document.createElement('tr');
-    tr.appendChild(tdName);
-    tr.appendChild(tdChance);
-
-    const tbody = table.querySelector('tbody');
-    tbody.appendChild(tr);
-}
-
-const elDataLastUpdated = document.querySelector('#data-last-updated');
-if (elDataLastUpdated) {
-    elDataLastUpdated.textContent = 'Last updated on ' + DATA_LAST_UPDATED.toLocaleDateString();
-}
-
-const buttonClearInputItems = document.querySelector('button.clear-items');
-buttonClearInputItems.addEventListener('click', () => {
-    const input = document.querySelector('input.search-items');
-    if (input) {
-        input.value = '';
-        input.focus();
-    }
-    clearItemDropTables();
-    showNoResults();
-});
-
-const inputSearchInputItems = document.querySelector('input.search-items')
-inputSearchInputItems.addEventListener('focus', (e) => {
-    e.target.select();
-});
-
-inputSearchInputItems.addEventListener('input', (e) => {
-    const needle = String(e.target.value).trim().toLowerCase().replace(/\s/g, '-');
+    const needle = String(input.value).trim().toLowerCase().replace(/\s/g, '-');
 
     if (needle.length === 0) {
         clearItemDropTables();
@@ -1400,6 +1358,71 @@ inputSearchInputItems.addEventListener('input', (e) => {
 
     (hasInputMatch ? hideNoResults : showNoResults)('input');
     (hasOutputMatch ? hideNoResults : showNoResults)('output');
+}
+
+function searchFor(item) {
+    const input = document.querySelector('input.search-items');
+    input.value = item;
+    handleSearchInput(input);
+}
+
+function addRowToTable(table, name, chance, category) {
+    const tdName = document.createElement('td');
+    tdName.classList.add('td-name');
+    tdName.textContent = name;
+
+    if (category) {
+        const span = document.createElement('span');
+        span.classList.add('sp-category');
+        span.textContent = '(' + category + ')';
+        tdName.appendChild(span);
+    }
+
+    const searchIcon = document.createElement('a');
+    searchIcon.classList.add('bi', 'bi-search', 'item-search-icon');
+    searchIcon.href = 'javascript:;'
+    searchIcon.title = 'Search for this item and see what it drops'
+    searchIcon.addEventListener('click', () => {
+        searchFor(name.toLowerCase());
+    });
+    tdName.appendChild(searchIcon);
+
+    const tdChance = document.createElement('td');
+    tdChance.classList.add('td-chance');
+    tdChance.textContent = chance;
+
+    const tr = document.createElement('tr');
+    tr.appendChild(tdName);
+    tr.appendChild(tdChance);
+    // TODO: Make item clickable (expands?) to show other items this item will give if thrown in the well (mostly for output table)
+
+    const tbody = table.querySelector('tbody');
+    tbody.appendChild(tr);
+}
+
+const elDataLastUpdated = document.querySelector('#data-last-updated');
+if (elDataLastUpdated) {
+    elDataLastUpdated.textContent = 'Last updated on ' + DATA_LAST_UPDATED.toLocaleDateString();
+}
+
+const buttonClearInputItems = document.querySelector('button.clear-items');
+buttonClearInputItems.addEventListener('click', () => {
+    const input = document.querySelector('input.search-items');
+    if (input) {
+        input.value = '';
+        input.focus();
+    }
+    clearItemDropTables();
+    showNoResults();
+});
+
+const inputSearchInputItems = document.querySelector('input.search-items')
+inputSearchInputItems.addEventListener('focus', (e) => {
+    e.target.select();
+});
+
+inputSearchInputItems.addEventListener('input', (e) => {
+    handleSearchInput(e.target)
 });
 
 inputSearchInputItems.addEventListener('keyup', (e) => {
