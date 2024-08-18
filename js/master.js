@@ -1381,7 +1381,7 @@ function addRowToTable(table, name, chance, category) {
     const searchIcon = document.createElement('a');
     searchIcon.classList.add('bi', 'bi-search', 'item-search-icon');
     searchIcon.href = 'javascript:;'
-    searchIcon.title = 'Search for this item and see what it drops'
+    searchIcon.title = 'Search for this item'
     searchIcon.addEventListener('click', () => {
         searchFor(name.toLowerCase());
     });
