@@ -1,0 +1,30 @@
+sub {
+    color: rgb(120, 120, 120);
+}
+
+.table-header {
+    margin: 0;
+}
+
+.clear-items {
+    border: 1px solid rgb(206, 212, 218);
+}
+
+.clear-items:hover {
+    background-color: rgb(218, 223, 229);
+}
+
+.no-results {
+    font-style: italic;
+}
+
+.sp-category {
+    color: rgb(120, 120, 120);
+    font-size: small;
+    margin-left: 1em;
+}
+
+.td-chance {
+    width: 1px;
+    white-space: nowrap;
+}
