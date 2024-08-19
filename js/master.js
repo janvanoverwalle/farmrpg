@@ -1423,7 +1423,7 @@ function addRowToTable(table, key, name, chance, category) {
 
 const elDataLastUpdated = document.querySelector('#data-last-updated');
 if (elDataLastUpdated) {
-    elDataLastUpdated.textContent = 'Last updated on ' + DATA_LAST_UPDATED.toLocaleDateString();
+    elDataLastUpdated.textContent = 'Data last updated on ' + DATA_LAST_UPDATED.toLocaleDateString();
 }
 
 const buttonClearInputItems = document.querySelector('button.clear-items');
