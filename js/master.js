@@ -1439,6 +1439,17 @@ if (elDataLastUpdated) {
     elDataLastUpdated.textContent = 'Data last updated on ' + DATA_LAST_UPDATED.toLocaleDateString();
 }
 
+const inputDarkMode = document.querySelector('#dark-mode-toggle');
+inputDarkMode.addEventListener('change', (e) => {
+    document.querySelector('html').setAttribute('data-bs-theme', e.target.checked ? 'dark' : 'light');
+    localStorage.setItem('dark-mode', e.target.checked);
+});
+
+// Enable dark mode if user had it enabled last time
+if (localStorage.getItem('dark-mode') === 'true' && !document.querySelector('#dark-mode-toggle').checked) {
+    document.querySelector('#dark-mode-toggle').click();
+}
+
 const buttonClearInputItems = document.querySelector('button.clear-items');
 buttonClearInputItems.addEventListener('click', () => {
     const input = document.querySelector('input.search-items');
