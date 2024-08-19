@@ -29,3 +29,7 @@
     width: 1px;
     white-space: nowrap;
 }
+
+.footer-text {
+    font-size: small;
+}
