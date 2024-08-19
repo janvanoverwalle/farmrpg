@@ -25,9 +25,17 @@
     margin-right: 1em;
 }
 
+.clickable {
+    cursor: pointer;
+}
+
 .td-chance {
     width: 1px;
     white-space: nowrap;
+}
+
+.td-collapse {
+    padding-left: 2em !important;
 }
 
 .footer-text {

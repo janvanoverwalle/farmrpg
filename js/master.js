@@ -1344,14 +1344,14 @@ function handleSearchInput(input) {
         if (inputItem.includes(needle)) {
             hasInputMatch = true;
             for (let itemDrop in DATA_ITEM_DROPS[inputItem]) {
-                addRowToTable(document.querySelector('#item-input-table'), DATA_ITEMS[itemDrop].name, DATA_ITEM_DROPS[inputItem][itemDrop], DATA_ITEMS[itemDrop].category);
+                addRowToTable(document.querySelector('#item-input-table'), itemDrop, DATA_ITEMS[itemDrop].name, DATA_ITEM_DROPS[inputItem][itemDrop], DATA_ITEMS[itemDrop].category);
             }
         }
 
         for (let outputItem in DATA_ITEM_DROPS[inputItem]) {
             if (outputItem.includes(needle)) {
                 hasOutputMatch = true;
-                addRowToTable(document.querySelector('#item-output-table'), DATA_ITEMS[inputItem].name, DATA_ITEM_DROPS[inputItem][outputItem], DATA_ITEMS[inputItem].category);
+                addRowToTable(document.querySelector('#item-output-table'), inputItem, DATA_ITEMS[inputItem].name, DATA_ITEM_DROPS[inputItem][outputItem], DATA_ITEMS[inputItem].category);
             }
         }
     }
@@ -1366,7 +1366,9 @@ function searchFor(item) {
     handleSearchInput(input);
 }
 
-function addRowToTable(table, name, chance, category) {
+function addRowToTable(table, key, name, chance, category) {
+    const numRows = table.querySelectorAll('tr').length;
+
     const tdName = document.createElement('td');
     tdName.classList.add('td-name');
     tdName.textContent = name;
@@ -1378,10 +1380,9 @@ function addRowToTable(table, name, chance, category) {
         tdName.appendChild(span);
     }
 
-    const searchIcon = document.createElement('a');
-    searchIcon.classList.add('bi', 'bi-search', 'item-search-icon');
-    searchIcon.href = 'javascript:;'
-    searchIcon.title = 'Search for this item'
+    const searchIcon = document.createElement('span');
+    searchIcon.classList.add('bi', 'bi-search', 'clickable', 'item-search-icon');
+    searchIcon.title = 'Search for this item';
     searchIcon.addEventListener('click', () => {
         searchFor(name.toLowerCase());
     });
@@ -1394,10 +1395,30 @@ function addRowToTable(table, name, chance, category) {
     const tr = document.createElement('tr');
     tr.appendChild(tdName);
     tr.appendChild(tdChance);
-    // TODO: Make item clickable (expands?) to show other items this item will give if thrown in the well (mostly for output table)
 
     const tbody = table.querySelector('tbody');
     tbody.appendChild(tr);
+
+    return;
+
+    // TODO: Make item clickable (expands?) to show other items this item will give if thrown in the well (mostly for output table)
+    const tdCard = document.createElement('td');
+    tdCard.classList.add('td-collapse');
+    tdCard.setAttribute('colspan', '2');
+    tdCard.textContent = key;
+
+    const trCollapse = document.createElement('tr');
+    trCollapse.classList.add('collapse');
+    trCollapse.setAttribute('id', table.id + '-row-' + numRows);
+    trCollapse.appendChild(tdCard);
+
+    tdName.classList.add('clickable');
+    tdName.setAttribute('data-bs-toggle', 'collapse');
+    tdName.setAttribute('data-bs-target', '#' + table.id + '-row-' + numRows);
+    tdName.setAttribute('aria-expanded', 'false');
+    tdName.setAttribute('aria-controls', table.id + '-row-' + numRows);
+
+    tbody.appendChild(trCollapse);
 }
 
 const elDataLastUpdated = document.querySelector('#data-last-updated');
