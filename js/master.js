@@ -1266,6 +1266,17 @@ const DATA_ITEM_DROPS = {
     }
 };
 
+function scrollToTop(scrollThreshold) {
+    if (scrollThreshold === undefined) {
+        scrollThreshold = 40;
+    }
+
+    if (document.body.scrollTop > scrollThreshold || document.documentElement.scrollTop > scrollThreshold) {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+}
+
 function displayElement(element, state) {
     if (element === null || element === undefined) {
         return;
@@ -1322,6 +1333,8 @@ function hideNoResults(tableType) {
 }
 
 function handleSearchInput(input) {
+    scrollToTop();
+
     if (input === undefined) {
         input = document.querySelector('input.search-items');
     }
@@ -1433,6 +1446,7 @@ buttonClearInputItems.addEventListener('click', () => {
         input.value = '';
         input.focus();
     }
+    scrollToTop();
     clearItemDropTables();
     showNoResults();
 });
@@ -1443,7 +1457,7 @@ inputSearchInputItems.addEventListener('focus', (e) => {
 });
 
 inputSearchInputItems.addEventListener('input', (e) => {
-    handleSearchInput(e.target)
+    handleSearchInput(e.target);
 });
 
 inputSearchInputItems.addEventListener('keyup', (e) => {

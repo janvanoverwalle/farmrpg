@@ -11,19 +11,25 @@
 </head>
 
 <body class="d-flex flex-column h-100">
-    <main class="flex-shrink-0">
+    <header class="header">
         <div class="container text-center">
-            <div class="row mt-1 mb-5">
+            <div class="row pt-1 pb-5">
                 <h1>Wishing Well Tool</h1>
                 <sub id="data-last-updated" class="text-muted"></sub>
             </div>
-            <div class="row mx-5 mb-3">
+            <div class="row mx-5 pb-2">
                 <div class="input-group">
                     <input type="text" class="form-control search-items" placeholder="Search for items"
                         aria-label="Search" aria-describedby="clear-items" autocomplete="off">
                     <button id="clear-items" class="btn btn-light clear-items" type="button">Clear</button>
                 </div>
             </div>
+        </div>
+        <div class="header-spacer"></div>
+    </header>
+
+    <main>
+        <div class="container text-center">
             <div class="row mx-5">
                 <div class="col col-lg-6 col-md-12 mb-5">
                     <h3 class="table-header">Inputs</h3>
@@ -61,7 +67,8 @@
 
     <footer class="footer mt-auto py-3 bg-light">
         <div class="container text-center">
-            <span class="footer-text text-muted">For use with the <a target="_blank" href="https://farmrpg.com/">FarmRPG</a> wishing well.</span>
+            <span class="footer-text text-muted">For use with the <a target="_blank"
+                    href="https://farmrpg.com/">FarmRPG</a> wishing well.</span>
         </div>
     </footer>
 
