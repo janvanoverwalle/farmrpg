@@ -1338,7 +1338,12 @@ function handleSearchInput(input) {
     if (input === undefined) {
         input = document.querySelector('input.search-items');
     }
-    const needle = String(input.value).trim().toLowerCase().replace(/\s/g, '-');
+
+    let needle = String(input.value).trim().toLowerCase().replace(/\s/g, '-');
+    const useExactMatch = needle.slice(0, 1) === '"' && needle.slice(-1) === '"';
+    if (useExactMatch) {
+        needle = needle.slice(1, -1); // Remove double quotes from string
+    }
 
     if (needle.length === 0) {
         clearItemDropTables();
@@ -1353,8 +1358,10 @@ function handleSearchInput(input) {
 
     let hasInputMatch = false;
     let hasOutputMatch = false;
+    const matches = useExactMatch ? (s1, s2) => s1 === s2 : (s1, s2) => s1.includes(s2);
+
     for (let inputItem in DATA_ITEM_DROPS) {
-        if (inputItem.includes(needle)) {
+        if (matches(inputItem, needle)) {
             hasInputMatch = true;
             for (let itemDrop in DATA_ITEM_DROPS[inputItem]) {
                 addRowToTable(document.querySelector('#item-input-table'), itemDrop, DATA_ITEMS[itemDrop].name, DATA_ITEM_DROPS[inputItem][itemDrop], DATA_ITEMS[itemDrop].category);
@@ -1362,12 +1369,14 @@ function handleSearchInput(input) {
         }
 
         for (let outputItem in DATA_ITEM_DROPS[inputItem]) {
-            if (outputItem.includes(needle)) {
+            if (matches(outputItem, needle)) {
                 hasOutputMatch = true;
                 addRowToTable(document.querySelector('#item-output-table'), inputItem, DATA_ITEMS[inputItem].name, DATA_ITEM_DROPS[inputItem][outputItem], DATA_ITEMS[inputItem].category);
             }
         }
     }
+
+    // TODO: Add suggested items dropdown based on current input
 
     (hasInputMatch ? hideNoResults : showNoResults)('input');
     (hasOutputMatch ? hideNoResults : showNoResults)('output');
