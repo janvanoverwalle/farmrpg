@@ -1474,7 +1474,7 @@ function addRowToTable(table, key, name, chance, category) {
     searchIcon.classList.add('bi', 'bi-search', 'clickable', 'item-search-icon');
     searchIcon.title = 'Search for this item';
     searchIcon.addEventListener('click', () => {
-        searchFor(name);
+        searchFor('"' + name + '"');
     });
     tdName.appendChild(searchIcon);
 
