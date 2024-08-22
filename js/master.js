@@ -1332,6 +1332,72 @@ function hideNoResults(tableType) {
     }
 }
 
+function clearSuggestedItems() {
+    const ul = document.querySelector('ul.dropdown-menu');
+    if (ul) {
+        while (ul.firstChild) {
+            ul.removeChild(ul.lastChild);
+        }
+        ul.classList.remove('dropdown-menu');
+    }
+}
+
+function hideSuggestedItems() {
+    const input = document.querySelector('input.dropdown-toggle');
+    if (input) {
+        const dropdown = new bootstrap.Dropdown(input);
+        dropdown.hide();
+    }
+}
+
+function showSuggestedItems(inputItem) {
+    clearSuggestedItems();
+
+    const suggestedItems = [];
+    for (let item in DATA_ITEMS) {
+        if (item.includes(inputItem)) {
+            suggestedItems.push({
+                name: DATA_ITEMS[item].name,
+                value: item
+            });
+        }
+    }
+
+    if (suggestedItems.length < 1) {
+        hideSuggestedItems();
+        return;
+    }
+
+    if (suggestedItems.length === 1 && suggestedItems[0].value === inputItem) {
+        hideSuggestedItems();
+        return;
+    }
+
+    let input = document.querySelector('input.dropdown-toggle');
+    if (input === null) {
+        input = document.querySelector('input.search-items');
+        input.parentElement.classList.add('dropdown');
+        input.setAttribute('data-bs-toggle', 'dropdown');
+        input.classList.add('dropdown-toggle');
+    }
+
+    const ul = document.querySelector('ul.dropdown-list');
+    ul.classList.add('dropdown-menu');
+    for (let suggestedItem of suggestedItems) {
+        const li = document.createElement('li');
+        li.textContent = suggestedItem.name;
+        li.classList.add('dropdown-item', 'clickable');
+        li.addEventListener('click', (e) => {
+            searchFor('"' + e.target.textContent + '"');
+        });
+
+        ul.appendChild(li);
+    }
+
+    const dropdown = new bootstrap.Dropdown(input);
+    dropdown.show();
+}
+
 function handleSearchInput(input) {
     scrollToTop();
 
@@ -1345,12 +1411,14 @@ function handleSearchInput(input) {
         needle = needle.slice(1, -1); // Remove double quotes from string
     }
 
-    if (needle.length === 0) {
+    if (needle.length < 1) {
+        clearSuggestedItems();
+        hideSuggestedItems();
         clearItemDropTables();
         showNoResults();
     }
 
-    if (needle.length < 3) {
+    if (needle.length < 2) {
         return;
     }
 
@@ -1376,10 +1444,10 @@ function handleSearchInput(input) {
         }
     }
 
-    // TODO: Add suggested items dropdown based on current input
-
     (hasInputMatch ? hideNoResults : showNoResults)('input');
     (hasOutputMatch ? hideNoResults : showNoResults)('output');
+
+    showSuggestedItems(needle);
 }
 
 function searchFor(item) {
@@ -1406,7 +1474,7 @@ function addRowToTable(table, key, name, chance, category) {
     searchIcon.classList.add('bi', 'bi-search', 'clickable', 'item-search-icon');
     searchIcon.title = 'Search for this item';
     searchIcon.addEventListener('click', () => {
-        searchFor(name.toLowerCase());
+        searchFor(name);
     });
     tdName.appendChild(searchIcon);
 
@@ -1470,6 +1538,8 @@ buttonClearInputItems.addEventListener('click', () => {
         input.focus();
     }
     scrollToTop();
+    clearSuggestedItems();
+    hideSuggestedItems();
     clearItemDropTables();
     showNoResults();
 });
