@@ -1557,5 +1557,6 @@ inputSearchInputItems.addEventListener('keyup', (e) => {
     if (e.key === 'Enter') {
         e.preventDefault();
         e.target.blur();
+        hideSuggestedItems();
     }
 });
