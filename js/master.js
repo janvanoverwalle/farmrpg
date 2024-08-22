@@ -1412,10 +1412,10 @@ function handleSearchInput(input) {
     }
 
     if (needle.length < 1) {
-        clearSuggestedItems();
-        hideSuggestedItems();
         clearItemDropTables();
         showNoResults();
+        clearSuggestedItems();
+        hideSuggestedItems();
     }
 
     if (needle.length < 2) {
@@ -1538,10 +1538,10 @@ buttonClearInputItems.addEventListener('click', () => {
         input.focus();
     }
     scrollToTop();
-    clearSuggestedItems();
-    hideSuggestedItems();
     clearItemDropTables();
     showNoResults();
+    clearSuggestedItems();
+    hideSuggestedItems();
 });
 
 const inputSearchInputItems = document.querySelector('input.search-items')
