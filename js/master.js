@@ -1443,6 +1443,9 @@ function addRowToTable(table, key, name, chance, category) {
     tbody.appendChild(trCollapse);
 }
 
+// Initialize tooltips (if any)
+document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(t => new bootstrap.Tooltip(t));
+
 const elDataLastUpdated = document.querySelector('#data-last-updated');
 if (elDataLastUpdated) {
     elDataLastUpdated.textContent = 'Data last updated on ' + DATA_LAST_UPDATED.toLocaleDateString();
